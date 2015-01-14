@@ -1,0 +1,71 @@
+buildscript {
+	ext {
+		springBootVersion = '1.2.0.RELEASE'
+	}
+    repositories {
+        maven { url "http://repo.spring.io/libs-snapshot" }
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'scala'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+war {
+    baseName = 'scala-slick-springboot-sample-server'
+    version =  '1.0.0'
+}
+
+repositories {
+    jcenter()
+	mavenCentral()
+}
+
+dependencies {
+
+    compile project(":common")
+    compile 'org.scala-lang:scala-library:2.11.4'
+    //compile 'com.typesafe.slick:slick_2.11:2.1.0'
+    compile 'com.typesafe.slick:slick_2.11:3.0.0-M1'
+    compile 'com.fasterxml.jackson.module:jackson-module-scala_2.11:2.4.4'
+
+    //base dependencies for Spring Boot
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-logging:${springBootVersion}")
+
+	//message bus using Spring AMQP and RabbitMQ
+	//see: http://projects.spring.io/spring-amqp/
+    compile "org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}"
+
+	//Spring Actuator helps to monitor and manage applications with
+	//Endpoint, Metrics, Audit, and Process Monitoring
+	//see: https://github.com/spring-projects/spring-boot/tree/master/spring-boot-actuator
+	//see: http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+
+    //enable Spring Security for authentication and authorisation
+    compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.5.RELEASE")
+
+    //uses the latest HSQLDB version (2.3.2) for Spring Boot
+    compile("org.hsqldb:hsqldb:2.3.2")
+	
+    // We use Scalatest for testing our library
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.scalatest:scalatest_2.11:2.2.3'
+	testCompile "org.springframework.boot:spring-boot-starter-test"
+    testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.3'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}

@@ -1,5 +1,18 @@
-.gradle
-build/
+# generated files
+**/bin
+**/gen
+*.class
+*.log
+
+# gradle and IntelliJ specifics
+**/.gradle
+**/.idea
+**/build
+*.iml
+
+# windows specifics
+desktop.ini
+local.properties
 
 # Ignore Gradle GUI config
 gradle-app.setting
